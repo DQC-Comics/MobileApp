@@ -1,25 +1,22 @@
-using MobileApp.Droid;
+﻿using MobileApp.WinPhone;
 
 [assembly: Xamarin.Forms.Dependency(typeof(MobileClient))]
 
-namespace MobileApp.Droid
+namespace MobileApp.WinPhone
 {
     using System.Threading.Tasks;
-    using Android.Webkit;
     using Microsoft.WindowsAzure.MobileServices;
-    using Xamarin.Forms;
 
-    class MobileClient : IMobileClient
+    public class MobileClient : IMobileClient
     {
         public async Task<MobileServiceUser> LoginAsync(MobileServiceAuthenticationProvider provider)
         {
-            return await App.Client.LoginAsync(Forms.Context, provider);
+            return await MobileApp.App.Client.LoginAsync(provider);
         }
 
         public async void Logout()
         {
-            CookieManager.Instance.RemoveAllCookie();
-            await App.Client.LogoutAsync();
+            await MobileApp.App.Client.LogoutAsync();
         }
     }
 }

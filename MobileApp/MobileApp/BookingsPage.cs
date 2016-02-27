@@ -6,23 +6,22 @@
 
     public class BookingsPage : ContentPage
     {
-        public BookingsPage(UserDetails user)
+        private Label messageLabel;
+        private ListView contactList;
+
+        public BookingsPage()
         {
-            var contactList = new ListView
+            messageLabel = new Label();
+
+            contactList = new ListView
             {
-                ItemsSource = new List<Booking>
-                {
-                    new Booking { HeroName = "Dave Bennet", Description = "ABC 123", StartTime = DateTime.Parse("2016-02-26 20:15"), EndTime = DateTime.Parse("2016-02-27 20:15") },
-                    new Booking { HeroName = "Julie Rhodes", Description = "ABC 123", StartTime = DateTime.Parse("2016-02-26 20:15"), EndTime = DateTime.Parse("2016-02-27 20:15") },
-                    new Booking { HeroName = "Jasmine Haskell", Description = "ABC 123", StartTime = DateTime.Parse("2016-02-26 20:15"), EndTime = DateTime.Parse("2016-02-27 20:15") }
-                },
                 RowHeight = 50,
                 HasUnevenRows = true
             };
             contactList.ItemTemplate = new DataTemplate(typeof(TextCell));
             contactList.ItemTemplate.SetBinding(TextCell.TextProperty, "HeroName");
 
-            contactList.ItemTapped += OnItemTapped;
+            contactList.ItemSelected += OnItemSelected;
 
             var newButton = new Button { Text = "Help me!" };
             newButton.Clicked += OnNewClicked;
@@ -34,11 +33,27 @@
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 Children =
                 {
-                    new Label { Text = "Hello " + user.Name, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)), FontAttributes = FontAttributes.Bold },
+                    new Label { Text = "Hello " + App.User.Name, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)), FontAttributes = FontAttributes.Bold },
                     newButton,
-                    contactList
+                    contactList,
+                    messageLabel
                 }
             };
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            try
+            {
+                var bookings = await App.Client.InvokeApiAsync<BookingUser, ICollection<Booking>>("bookings", new BookingUser { UserId = App.User.Id });
+                contactList.ItemsSource = bookings;
+            }
+            catch (Exception ex)
+            {
+                messageLabel.Text = ex.Message;
+            }
         }
 
         private async void OnNewClicked(object sender, EventArgs e)
@@ -46,9 +61,9 @@
             await Navigation.PushAsync(new NewBookingPage());
         }
 
-        private async void OnItemTapped(object sender, EventArgs e)
+        private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            await Navigation.PushAsync(new BookingDetailsPage((Booking)((ItemTappedEventArgs)e).Item));
+            await Navigation.PushAsync(new BookingDetailsPage((Booking)e.SelectedItem));
         }
     }
 }

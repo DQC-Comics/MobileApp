@@ -59,8 +59,9 @@
                         userDetails.Name = claim["val"].ToString();
                     }
                 }
+                App.User = userDetails;
 
-                Navigation.InsertPageBefore(new BookingsPage(userDetails), this);
+                Navigation.InsertPageBefore(new BookingsPage(), this);
                 await Navigation.PopAsync();
             }
             catch (InvalidOperationException ex)

@@ -7,13 +7,15 @@
     {
         public static MobileServiceClient Client { get; private set; }
 
+        public static UserDetails User { get; set; }
+
         public App()
         {
             Client = new MobileServiceClient(@"https://dqccomics-mobileapi.azurewebsites.net");
+            User = new UserDetails { Id = "mobile-test", Name = "Mobile Test User" };
 
             // The root page of your application
-            //MainPage = new NavigationPage(new LoginPage());
-            MainPage = new NavigationPage(new BookingsPage(new UserDetails { Name = "Demo User" }));
+            MainPage = new NavigationPage(new LoginPage());
         }
 
         protected override void OnStart()

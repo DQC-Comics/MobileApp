@@ -38,7 +38,10 @@
     <Compile Include="App.cs" />
     <Compile Include="Booking.cs" />
     <Compile Include="BookingDetailsPage.cs" />
+    <Compile Include="BookingNew.cs" />
+    <Compile Include="BookingRating.cs" />
     <Compile Include="BookingsPage.cs" />
+    <Compile Include="BookingUser.cs" />
     <Compile Include="IMobileClient.cs" />
     <Compile Include="LoginPage.cs" />
     <Compile Include="NewBookingPage.cs" />
