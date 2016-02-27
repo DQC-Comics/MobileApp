@@ -13,5 +13,7 @@ namespace MobileApp
         public DateTimeOffset? StartTime { get; set; }
 
         public DateTimeOffset? EndTime { get; set; }
+
+        public double Rating { get; set; }
     }
 }

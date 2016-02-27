@@ -15,7 +15,6 @@
             this.currentBooking = booking;
 
             this.rating = new Picker();
-            this.rating.Items.Clear();
             this.rating.Items.Add("0.0");
             this.rating.Items.Add("0.5");
             this.rating.Items.Add("1.0");
@@ -27,6 +26,15 @@
             this.rating.Items.Add("4.0");
             this.rating.Items.Add("4.5");
             this.rating.Items.Add("5.0");
+
+            for (int i = 0; i < rating.Items.Count; i++)
+            {
+                if (booking.Rating == double.Parse(rating.Items[i], CultureInfo.InvariantCulture))
+                {
+                    this.rating.SelectedIndex = i;
+                    break;
+                }
+            }
 
             var button = new Button() { Text = "Rate booking" };
             button.Clicked += ButtonOnClicked;
